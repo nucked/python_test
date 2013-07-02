@@ -9,19 +9,27 @@ data = 1
 offset = 0x0
 while data:   
     fp.seek(offset)
-    data = fp.read(4)
-    offset= offset+1    
+    data = fp.read(4)  
     if data == png_h:
         i = 0
         data_e = 1
-        wp = open(r'c:/'+hex(offset)+'.png','wb')
-        wp.write(png_h)
-        while data_e and i<0xd0cd64 and data_e != png_e:            
+        wp = open(r'c:/build/'+hex(offset)+'.png','wb')
+        while data_e and data_e != png_e:
+            fp.seek(offset+i)
             data_e = fp.read(4)
-            wp.write(data_e)
-            i = i+1               
+            i = i+1
             
-        print 'offset is '+hex(offset)+' '+data
+        i = i+3
+        fp.seek(offset)
+        wp.write(fp.read(i))
+        print 'offset is '+hex(offset)+' file size is '+hex(i) + ' file end is '+hex(offset + i)
+        
+        wp.flush()
+        wp.close()
+            
+        
+    
+    offset= offset+1  
     
     
     
