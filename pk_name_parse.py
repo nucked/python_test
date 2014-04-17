@@ -11,6 +11,10 @@ def walk_dir(path,topdown=True):
              for name in files:
                  if name[-4:] == ".apk":
                      apk_unpack(os.path.join(root,name))
+                 elif name[-4:] == ".txt":
+                     txt_parse(os.path.join(root,name))
+                 else:
+                     print "not found method matched"
     else:
         apk_unpack(path)
                     
@@ -18,11 +22,10 @@ def walk_dir(path,topdown=True):
 def apk_unpack(apk_file):
     cmd = r"aapt d badging "+apk_file    
     pk_re = re.compile(r'name=\'(.+?)\'')
-
     apk_name = apk_file.split("\\")
     k = len(apk_name)
     apk_dir = ""
-    for i in range(4,k):
+    for i in range(5,k):
         apk_dir = apk_dir + "/" + apk_name[i]
     
     data = subprocess.Popen(cmd, stdout=subprocess.PIPE, \
@@ -32,7 +35,29 @@ def apk_unpack(apk_file):
     if len(pk_name) !=0:
         apk_pk_file.write(apk_dir + " : " + pk_name[0] + "\n")
         print pk_name[0]+ " is wrote"
+
+def txt_parse(packages_txt):
+    f = open(packages_txt,"r")
+    pk_re = re.compile(r'name=\'(.+?)\'')
+    apk_name = packages_txt.split("\\")
+    yuquan_txt = apk_name[-1]
+    if yuquan_txt[0] == "z":
+        for i in f:
+            pk_name = pk_re.findall(i)
+            if len(pk_name)>0:
+                for j in range(0,len(pk_name)):
+                    apk_pk_file.write(pk_name[j]+"\n")
+    else:
+        for k in f:
+            pk_name = k.split(" : ")
+            if len(pk_name)>1:
+                apk_pk_file.write(pk_name[1])
     
+    
+    
+    
+    
+
     
 def mkdir(path):
     path = path.strip()
@@ -56,7 +81,7 @@ if __name__ == '__main__':
         path = raw_input("input the dir:")
     else:
         print r"the apks are in D:\Users\wind\apk"
-        path = r"D:\Users\wind\apk"
+        path = r"F:\pk_name_list"
     walk_dir(path)
     print "\n=========Done========="
     print "\nYou can check the pk_name in "+outTxt
