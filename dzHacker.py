@@ -1,7 +1,10 @@
 # -*- coding: cp936 -*-
 import urllib2, urllib
 import re
-
+'''
+作者：子不语夏达
+联系微博：http://weibo.com/20608964
+'''
 checkUser="member.php?mod=logging&action=login\
 &loginsubmit=yes&infloat=yes&lssubmit\
 =yes&inajax=1&handlekey=ls&quickforward\
